@@ -48,7 +48,9 @@ async function main() {
 	console.log();
 
 	console.log(await flc.connect(uni).transfer(inverser.getAddress(), hre.ethers.utils.parseEther("10000")));
-	console.log(await flc.connect(inverser).transfer(owner.getAddress(), hre.ethers.utils.parseEther("20000")));
+//	console.log(await flc.connect(inverser).transfer(owner.getAddress(), hre.ethers.utils.parseEther("20000")));
+	console.log(await flc.connect(inverser).approve(owner.getAddress(), hre.ethers.utils.parseEther("20000")));
+	console.log(await flc.transferFrom(inverser.getAddress(), owner.getAddress(), hre.ethers.utils.parseEther("20000")));
 	/*
 	console.log(
 	`Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`

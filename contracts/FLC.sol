@@ -72,4 +72,21 @@ contract Flc is ERC20 {
 
 		return ERC20.transfer(to, amount);
 	}
+
+	/**
+		transferFrom with lock checking
+	*/
+	function transferFrom(address from, address to, uint amount) public override returns(bool) {
+		require(balanceOf(from) >= locks[from], "The locks > the balance!");
+
+		if (unlocktimes[from] > block.timestamp) {
+			require(balanceOf(from) - locks[from] >= amount, "The part of balance is locked!");
+		} else {
+			if (unlocktimes[from] != 0) {
+				unlocktimes[from] = 0;
+			}
+		}
+
+		return ERC20.transferFrom(from, to, amount);
+	}
 }
