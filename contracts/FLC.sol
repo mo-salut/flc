@@ -11,32 +11,32 @@ contract Flc is ERC20 {
 	
 	constructor() ERC20("Floorswap coin", "FLC") {
 		// inverser 2,000,000,000.000 * 12%
-		address inverser = address(0x70997970C51812dc3A010C7d01b50e0d17dc79C8);
+		address inverser = address(0xfdFF374eF46e1da9b5258481c6E75F112D9Dd8a9);
 		uint amount = 2 * 1e27 * 12 / 100;
 		_mint(inverser, amount);
 		unlocktimes[inverser] = block.timestamp + 15552000;
 		locks[inverser] = amount;
 
 		// team 2,000,000,000.000 * 10%
-		address team = address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC);
+		address team = address(0x1C6fFE0e40aadE49b10Ddc79eC055CA5CE9AB249);
 		amount = 2 * 1e27 * 10 / 100;
 		_mint(team, amount);
 		unlocktimes[team] = block.timestamp + 31104000;
 		locks[team] = amount;
 
 		// builder repository 2,000,000,000.000 * 15%
-		address repository = address(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
+		address repository = address(0x4f785Dc67B31065aF7b3a4b37F9A91FF452f5D5c);
 		amount = 2 * 1e27 * 15 / 100;
 		_mint(repository, amount);
 		unlocktimes[repository] = block.timestamp + 15552000;
 		locks[repository] = amount;
 
 		// fund fund 2,000,000,000.000 * 5%
-		address fund = address(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
+		address fund = address(0x981172a86836c9E0Ce85E1a0B7932449A2aAE2A2);
 		_mint(fund, 2 * 1e27 * 5 / 100);
 
 		// fund uni 2,000,000,000.000 * 5%
-		address uni = address(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
+		address uni = address(0xab4e5594e940b82C207BfC1f766Dbb6D9B8D53aA);
 		_mint(uni, 2 * 1e27 * 15 / 1000);
 
 		owner = msg.sender;
@@ -88,5 +88,9 @@ contract Flc is ERC20 {
 		}
 
 		return ERC20.transferFrom(from, to, amount);
+	}
+
+	function burn(uint amount) public {
+		ERC20._burn(msg.sender, amount);
 	}
 }
