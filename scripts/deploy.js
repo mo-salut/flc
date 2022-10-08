@@ -1,9 +1,12 @@
 const hre = require("hardhat");
 
 async function main() {
-	const Flc = await hre.ethers.getContractFactory("Flc");
-	const flc = await Flc.deploy();
+	const Usdt = await hre.ethers.getContractFactory("Usdt");
+	const usdt = await Usdt.deploy();
+	await usdt.deployed();
 
+	const Flc = await hre.ethers.getContractFactory("Flc");
+	const flc = await Flc.deploy(usdt.address);
 	await flc.deployed();
 
 	/*
