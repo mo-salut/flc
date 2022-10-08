@@ -337,7 +337,7 @@ contract Flc is ERC20 {
 		locksInverser[msg.sender] = amount;
 		unlockTimesInverser[msg.sender] = block.timestamp + 7776000; // 7776000 = 90 days
 		buyPool += amount;
-		releaseEachInverser = amount / 365;
+		releaseEachInverser = amount / 365 / 3;
 
 		return true;
 	}
