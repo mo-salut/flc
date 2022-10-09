@@ -25,6 +25,7 @@ describe("Flc", function () {
 		await flc.deployed();
 	});
 
+	/*
 	it("print info", async () => {
 		console.log("FLC owner is", await owner.getAddress());
 		console.log("FLC deployed to", flc.address);
@@ -282,9 +283,12 @@ describe("Flc", function () {
 	*/
 
 	it("buy FLC by USDT", async function() {
+		console.log(await flc.getMaxPrivateLot());
 		await buy(users[0], owner);
+		console.log(await flc.getMaxPrivateLot());
 	});
 
+	/*
 	it("duplicate buy", async function() {
 		await buy(users[0], owner);
 		await expect(buy(users[0], owner)).to.be.revertedWith("The account has bought!");
@@ -312,6 +316,23 @@ describe("Flc", function () {
 			["-" + amount, amount]
 		);
 	});
+	*/
+
+	/*
+	it("get the max inverser & private lot", async function() {
+		console.log(await flc.getMaxInverserLot());
+		console.log(await flc.getMaxPrivateLot());
+	});
+
+	it("get the inversement price", async function() {
+		console.log(await flc.getInversementPrice());
+	});
+
+	it("get the inverser & private locks", async function() {
+		console.log(await flc.getLocksInverserOf(users[0].getAddress()));
+		console.log(await flc.getLocksPrivateOf(users[0].getAddress()));
+	});
+	*/
 
 	/*
 	it("burn", async function() {
@@ -332,8 +353,10 @@ async function buy(user, owner) {
 	)).to.emit(usdt, "Approval").withArgs(await user.getAddress(), flc.address, amount);
 	console.log(formatEther(await usdt.allowance(user.getAddress(), flc.address)));
 	console.log(await flc.connect(user).buy(boardLot));
+	/*
 	console.log(formatEther(await usdt.balanceOf(user.getAddress())));
 	console.log(formatEther(await usdt.balanceOf(owner.getAddress())));
 	console.log(formatEther(await flc.balanceOf(user.getAddress())));
 	console.log(formatEther(await flc.balanceOf(owner.getAddress())));
+	*/
 }
