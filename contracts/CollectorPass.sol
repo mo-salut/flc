@@ -87,9 +87,9 @@ contract CollectorPass is ERC721 {
 		safeTransferFrom(msg.sender, address(0x0), _id);
 	}
 
-	function withdraw(address payable account, uint amount) external onlyOwner {
-		require(address(this).balance >= amount, "Not enough Ethereums!");
-		account.transfer(amount);
+	function withdraw(address payable account, uint _amount) external onlyOwner {
+		require(address(this).balance >= _amount, "Not enough Ethereums!");
+		account.transfer(_amount);
 	}
 
 	function owner() external view returns(address) {

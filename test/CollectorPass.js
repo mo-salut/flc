@@ -14,10 +14,6 @@ describe("CollectorPass", function () {
 		const CollectorPass = await ethers.getContractFactory("CollectorPass");
 		cp = await CollectorPass.deploy();
 		await cp.deployed();
-
-		const Test = await ethers.getContractFactory("Test");
-		test = await Test.deploy();
-		await test.deployed();
 	});
 
 	describe("nft", function () {
@@ -100,32 +96,5 @@ describe("CollectorPass", function () {
 			console.log("user1 balance:", await users[1].getBalance());
 			console.log("contract balance:", balance);
 		});
-
-		/*
-		it("test", async function () {
-			console.log(cp.address);
-		//	await test.transfer()
-			console.log(cp.address);
-		});
-		*/
-
-		/*
-		it("test", async function () {
-			console.log("balance:", await test.getBalance());
-			console.log(await owner.sendTransaction({
-				to: test.address,
-				value: ethers.utils.parseEther("1.0")
-			}));
-			console.log("balance:", await test.getBalance());
-		});
-		*/
-
-		/*
-		it("test", async function () {
-			console.log(cp.address.balance);
-			await test.transfer()
-			console.log(cp.address.balance);
-		});
-		*/
 	});
 });
