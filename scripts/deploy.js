@@ -9,6 +9,10 @@ async function main() {
 	const flc = await Flc.deploy(usdt.address);
 	await flc.deployed();
 
+	const CollectorPass = await hre.ethers.getContractFactory("CollectorPass");
+	const cp = await CollectorPass.deploy();
+	await cp.deployed();
+
 	/*
 	let owner = ethers.provider.getSigner(0);
 	let inverser = ethers.provider.getSigner(1);

@@ -2,10 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Flc is ERC20 {
-	uint public _decimal;
 	address public owner;
 
 	IERC20 private usdt;
@@ -49,11 +47,11 @@ contract Flc is ERC20 {
 	constructor(address usdtContractAddress) ERC20("Floorswap coin", "FLC") {
 		// inverser 2,000,000,000 ether * 12% to mint by inversement
 		releaseEachInverser = 219178 ether; // for in 3 years, that each day should release 219178 FLC
-		maxInverserLot = 2000000000 ether * 3.25 / 100 / 2000; // a lot is 2000 ether
+		maxInverserLot = 2000000000 * 12 / 100 / 2000; // a lot is 2000 ether
 
 		// team 2,000,000,000 ether * 10%
-		address team = address(0x1C6fFE0e40aadE49b10Ddc79eC055CA5CE9AB249); // testnet
-	//	address team = address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC);
+	//	address team = address(0x1C6fFE0e40aadE49b10Ddc79eC055CA5CE9AB249); // testnet
+		address team = address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC);
 		uint amount = 2000000000 ether * 10 / 100;
 		_mint(team, amount);
 		unlockTimesTeam[team] = block.timestamp + 31104000;
@@ -61,8 +59,8 @@ contract Flc is ERC20 {
 		releaseEachTeam = 182648 ether; // for in 3 years, that each day should release 182648 FLC
 
 		// builder repository 2,000,000,000 ether * 15%
-		address repository = address(0x4f785Dc67B31065aF7b3a4b37F9A91FF452f5D5c); // testnet
-	//	address repository = address(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
+	//	address repository = address(0x4f785Dc67B31065aF7b3a4b37F9A91FF452f5D5c); // testnet
+		address repository = address(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
 		amount = 2000000000 ether * 15 / 100;
 		_mint(repository, amount);
 		unlockTimesRepository[repository] = block.timestamp + 15552000;
@@ -70,17 +68,17 @@ contract Flc is ERC20 {
 		releaseEachRepository = 273973 ether; // for in 3 years, that each day should release 273973 FLC
 
 		// fund 2,000,000,000 ether * 3.25%
-		address fund = address(0x981172a86836c9E0Ce85E1a0B7932449A2aAE2A2); // testnet
-	//	address fund = address(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
+	//	address fund = address(0x981172a86836c9E0Ce85E1a0B7932449A2aAE2A2); // testnet
+		address fund = address(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
 		_mint(fund, 2000000000 ether * 3.25 / 100);
 
 		// private 2,000,000,000 ether * 3.25% to mint by buy
 		releaseEachPrivate = 82192 ether; // for in 3 months, that each day should release 82192 FLC
-		maxPrivateLot = 2000000000 ether * 3.25 / 100 / 2000; // a lot is 2000 ether
+		maxPrivateLot = 2000000000 * 3.25 / 100 / 2000; // a lot is 2000 ether
 
 		// uni 2,000,000,000 ether * 1.5%
-		address uni = address(0xab4e5594e940b82C207BfC1f766Dbb6D9B8D53aA); // testnet
-	//	address uni = address(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
+	//	address uni = address(0xab4e5594e940b82C207BfC1f766Dbb6D9B8D53aA); // testnet
+		address uni = address(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
 		_mint(uni, 2000000000 ether * 1.5 / 100);
 
 		owner = msg.sender;
@@ -200,6 +198,20 @@ contract Flc is ERC20 {
 	}
 
 	/**
+		get the max inverser lot
+	*/
+	function getMaxInverserLot() public view returns(uint) {
+		return maxInverserLot;
+	}
+
+	/**
+		get the max private lot
+	*/
+	function getMaxPrivateLot() public view returns(uint) {
+		return maxPrivateLot;
+	}
+
+	/**
 		transfer
 		call transferFrom by msg.sender as params from
 	*/
@@ -297,8 +309,12 @@ contract Flc is ERC20 {
 		require(balanceOf(from) - locks >= amount, "The part of balance is locked!");
 	}
 
+	function getLocksPrivateOf(address account) external view returns(uint) {
+		return locksPrivate[account];
+	}
+
 	// private buy
-	function buy(uint lot) external returns(bool) {
+	function buy(uint lot) external returns(bool, uint) {
 		require(usdt.transferFrom(msg.sender, owner, lot * 10 ether), "Pay USDT failed!");
 		require(maxPrivateLot >= lot, "Not enough board lot!"); 
 		require(locksPrivate[msg.sender] == 0, "The account has bought!");
@@ -311,7 +327,7 @@ contract Flc is ERC20 {
 		buyPool += amount;
 		releaseEachPrivate = amount / 365;
 
-		return true;
+		return (true, maxInverserLot);
 	}
 
 	function inversementRun(uint price) external onlyOwner returns(bool) {
@@ -322,6 +338,14 @@ contract Flc is ERC20 {
 	function inversementStop() external onlyOwner returns(bool) {
 		inversementPrice = 0;
 		return true;
+	}
+
+	function getInversementPrice() external view returns(uint) {
+		return inversementPrice;
+	}
+
+	function getLocksInverserOf(address account) external view returns(uint) {
+		return locksInverser[account];
 	}
 
 	// inversement
