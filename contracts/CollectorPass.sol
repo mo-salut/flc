@@ -28,11 +28,11 @@ contract CollectorPass is ERC721URIStorage {
 		_;
 	}
 
-	constructor() ERC721 ("FLC Collector Pass", "FLC-CP") {
+	constructor(address  _super) ERC721 ("FLC Collector Pass", "FLC-CP") {
 		_freeMintable = 975;
 		_cheapMintable = 2025;
 
-		_owner = msg.sender;
+		_owner = _super;
 	}
 
 	receive() external payable {

@@ -12,24 +12,21 @@ describe("CollectorPass", function () {
 	beforeEach(async function() {
 		const [owner, otherAccount] = await ethers.getSigners();
 		const CollectorPass = await ethers.getContractFactory("CollectorPass");
-		cp = await CollectorPass.deploy();
+		cp = await CollectorPass.deploy(owner.getAddress());
 		await cp.deployed();
 	});
 
 	describe("nft", function () {
-		/*
 		it("mint free", async function () {
 			await expect((await cp.balanceOf(owner.getAddress())).toNumber()).to.equal(0);
 			await cp.freeMint();
 			await expect((await cp.balanceOf(owner.getAddress())).toNumber()).to.equal(1);
 			console.log(await cp.freeMintable(owner.getAddress()));
 			console.log(await cp.freeLength(owner.getAddress()));
-			console.log(await cp.tokenURI(0));
+			console.log(await cp.typeOf(0));
 			console.log(await cp.ownerOf(0));
 			console.log(await cp.amount());
-			console.log(await cp.accountNFTs(owner.getAddress()));
 		});
-		*/
 
 		it("mint cheap", async function () {
 			await expect((await cp.balanceOf(owner.getAddress())).toNumber()).to.equal(0);
@@ -37,7 +34,7 @@ describe("CollectorPass", function () {
 				console.log(data - 1);
 				console.log(await ethers.provider.getBalance(cp.address));
 				await expect((await cp.balanceOf(owner.getAddress())).toNumber()).to.equal(1);
-				console.log(await cp.cheapMintable(owner.getAddress()));
+				console.log(await cp.cheapMintable());
 				console.log(await cp.cheapLength(owner.getAddress()));
 			//	console.log("token URI:", await cp.tokenURI(data));
 				console.log("type of:", await cp.typeOf(data - 1));
@@ -63,7 +60,6 @@ describe("CollectorPass", function () {
 			await new Promise(res => setTimeout(() => res(null), 30000));
 		});
 
-		/*
 		it("mint", async function () {
 			await expect((await cp.balanceOf(owner.getAddress())).toNumber()).to.equal(0);
 			console.log(await cp.safeMint(owner.getAddress(), 2));
@@ -73,9 +69,7 @@ describe("CollectorPass", function () {
 			console.log(await cp.safeMint(owner.getAddress(), 0));
 			await expect((await cp.balanceOf(owner.getAddress())).toNumber()).to.equal(5);
 		});
-		*/
 
-		/*
 		it("withdraw", async function () {
 			console.log("user0 balance:", await users[0].getBalance());
 			console.log("user1 balance:", await users[1].getBalance());
@@ -105,6 +99,5 @@ describe("CollectorPass", function () {
 			console.log("user1 balance:", await users[1].getBalance());
 			console.log("contract balance:", balance);
 		});
-		*/
 	});
 });

@@ -16,16 +16,28 @@ describe("Flc", function () {
 	let users = [ethers.provider.getSigner(6), ethers.provider.getSigner(7)];
 	
 	beforeEach(async function() {
+		/*
 		const Usdt = await hre.ethers.getContractFactory("Usdt");
 		usdt = await Usdt.deploy();
 		await usdt.deployed();
+		*/
+
+		usdt = await hre.ethers.getContractAt("Usdt", "0x1c85638e118b37167e9298c2268758e058DdfDA0");
 
 		const Flc = await hre.ethers.getContractFactory("Flc");
-		flc = await Flc.deploy();
+		flc = await Flc.deploy(owner.getAddress());
 		await flc.deployed();
 	});
 
+	/*
 	it("print info", async () => {
+		console.log(usdt.address);
+	});
+	*/
+
+	/*
+	it("print info", async () => {
+		console.log(usdt.address);
 		console.log("FLC owner is", await owner.getAddress());
 		console.log("FLC deployed to", flc.address);
 
@@ -65,8 +77,13 @@ describe("Flc", function () {
 
 		console.log();
 	});
+	*/
 
 	it("spending unlocked by transfer", async function() {
+		console.log(await team.getAddress());
+		console.log(await repository.getAddress());
+		console.log(await fund.getAddress());
+		console.log(await uni.getAddress());
 		await flc.connect(fund).transfer(owner.getAddress(), parseEther("10000"));
 		await flc.connect(uni).transfer(owner.getAddress(), parseEther("10000"));
 		await expect(formatEther(await flc.balanceOf(owner.getAddress()))).to.equal("20000.0");
@@ -285,7 +302,6 @@ describe("Flc", function () {
 		console.log(await flc.getMaxPrivateLot());
 	});
 
-	/*
 	it("duplicate buy", async function() {
 		await buy(users[0], owner);
 		await expect(buy(users[0], owner)).to.be.revertedWith("The account has bought!");
@@ -313,9 +329,7 @@ describe("Flc", function () {
 			["-" + amount, amount]
 		);
 	});
-	*/
 
-	/*
 	it("get the max inverser & private lot", async function() {
 		console.log(await flc.getMaxInverserLot());
 		console.log(await flc.getMaxPrivateLot());
@@ -329,15 +343,12 @@ describe("Flc", function () {
 		console.log(await flc.getLocksInverserOf(users[0].getAddress()));
 		console.log(await flc.getLocksPrivateOf(users[0].getAddress()));
 	});
-	*/
 
-	/*
 	it("burn", async function() {
 		console.log(await flc.connect(uni).transfer(owner.getAddress(), parseEther("10000")));
 		console.log(await flc.burn(parseEther("3000")));
 		console.log(formatEther(await flc.balanceOf(owner.getAddress())));
 	});
-	*/
 });
 
 async function buy(user, owner) {
