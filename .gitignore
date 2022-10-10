@@ -9,5 +9,4 @@ hardhat.config.js
 #Hardhat files
 cache
 artifacts
-script/*
-test/*
+scripts/*
