@@ -44,14 +44,13 @@ contract Flc is ERC20 {
 		_;
 	}
 	
-	constructor(address usdtContractAddress) ERC20("Floorswap coin", "FLC") {
+	constructor() ERC20("Floorswap coin", "FLC") {
 		// inverser 2,000,000,000 ether * 12% to mint by inversement
 		releaseEachInverser = 219178 ether; // for in 3 years, that each day should release 219178 FLC
 		maxInverserLot = 2000000000 * 12 / 100 / 2000; // a lot is 2000 ether
 
 		// team 2,000,000,000 ether * 10%
-	//	address team = address(0x1C6fFE0e40aadE49b10Ddc79eC055CA5CE9AB249); // testnet
-		address team = address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC);
+		address team = address(0x1C6fFE0e40aadE49b10Ddc79eC055CA5CE9AB249); // mainnet
 		uint amount = 2000000000 ether * 10 / 100;
 		_mint(team, amount);
 		unlockTimesTeam[team] = block.timestamp + 31104000;
@@ -59,8 +58,7 @@ contract Flc is ERC20 {
 		releaseEachTeam = 182648 ether; // for in 3 years, that each day should release 182648 FLC
 
 		// builder repository 2,000,000,000 ether * 15%
-	//	address repository = address(0x4f785Dc67B31065aF7b3a4b37F9A91FF452f5D5c); // testnet
-		address repository = address(0x90F79bf6EB2c4f870365E785982E1f101E93b906);
+		address repository = address(0x4f785Dc67B31065aF7b3a4b37F9A91FF452f5D5c); // mainnet
 		amount = 2000000000 ether * 15 / 100;
 		_mint(repository, amount);
 		unlockTimesRepository[repository] = block.timestamp + 15552000;
@@ -68,8 +66,7 @@ contract Flc is ERC20 {
 		releaseEachRepository = 273973 ether; // for in 3 years, that each day should release 273973 FLC
 
 		// fund 2,000,000,000 ether * 3.25%
-	//	address fund = address(0x981172a86836c9E0Ce85E1a0B7932449A2aAE2A2); // testnet
-		address fund = address(0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65);
+		address fund = address(0x981172a86836c9E0Ce85E1a0B7932449A2aAE2A2); // mainnet
 		_mint(fund, 2000000000 ether * 3.25 / 100);
 
 		// private 2,000,000,000 ether * 3.25% to mint by buy
@@ -77,12 +74,11 @@ contract Flc is ERC20 {
 		maxPrivateLot = 2000000000 * 3.25 / 100 / 2000; // a lot is 2000 ether
 
 		// uni 2,000,000,000 ether * 1.5%
-	//	address uni = address(0xab4e5594e940b82C207BfC1f766Dbb6D9B8D53aA); // testnet
-		address uni = address(0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc);
+		address uni = address(0xab4e5594e940b82C207BfC1f766Dbb6D9B8D53aA); // mainnet
 		_mint(uni, 2000000000 ether * 1.5 / 100);
 
 		owner = msg.sender;
-		usdt = IERC20(usdtContractAddress);
+		usdt = IERC20(address(0xdAC17F958D2ee523a2206206994597C13D831ec7));
 	}
 
 	/**

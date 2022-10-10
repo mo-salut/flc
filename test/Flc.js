@@ -21,11 +21,10 @@ describe("Flc", function () {
 		await usdt.deployed();
 
 		const Flc = await hre.ethers.getContractFactory("Flc");
-		flc = await Flc.deploy(usdt.address);
+		flc = await Flc.deploy();
 		await flc.deployed();
 	});
 
-	/*
 	it("print info", async () => {
 		console.log("FLC owner is", await owner.getAddress());
 		console.log("FLC deployed to", flc.address);
@@ -275,12 +274,10 @@ describe("Flc", function () {
 		);
 	});
 
-	/*
 	it("balance of USDT", async function() {
 		console.log(await usdt.balanceOf(users[0].getAddress()));
 		console.log(await usdt.balanceOf(users[1].getAddress()));
 	});
-	*/
 
 	it("buy FLC by USDT", async function() {
 		console.log(await flc.getMaxPrivateLot());

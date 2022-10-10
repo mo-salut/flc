@@ -1,17 +1,21 @@
 const hre = require("hardhat");
 
 async function main() {
+	/*
 	const Usdt = await hre.ethers.getContractFactory("Usdt");
 	const usdt = await Usdt.deploy();
 	await usdt.deployed();
+	*/
 
 	const Flc = await hre.ethers.getContractFactory("Flc");
-	const flc = await Flc.deploy(usdt.address);
+	const flc = await Flc.deploy();
 	await flc.deployed();
 
+	/*
 	const CollectorPass = await hre.ethers.getContractFactory("CollectorPass");
 	const cp = await CollectorPass.deploy();
 	await cp.deployed();
+	*/
 
 	/*
 	let owner = ethers.provider.getSigner(0);

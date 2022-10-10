@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "hardhat/console.sol";
 
-contract CollectorPass is ERC721 {
+contract CollectorPass is ERC721URIStorage {
 	mapping (uint => uint8) private types; // token types: 0, 1, 2
 	uint private _freeMintable; // the amount can be free minted
 	uint private _cheapMintable; // the amount can be cheap minted
@@ -11,6 +12,14 @@ contract CollectorPass is ERC721 {
 	address private _owner; // the contract owner address;
 	mapping (address => uint8) private _freeLength; // accounts' free minted quantity 
 	mapping (address => uint8) private _cheapLength; // accounts' cheap minted quantity
+
+	uint16 private greenLength; 
+	uint16 private goldLength; 
+	uint16 private purpleLength; 
+
+	string private green = "https://www.floorswap.info/green.json";
+	string private gold = "https://www.floorswap.info/gold.json";
+	string private purple = "https://www.floorswap.info/purple.json";
 
 	event CheapMinted(uint data);
 
@@ -35,7 +44,44 @@ contract CollectorPass is ERC721 {
 		require(_freeLength[msg.sender] < 3, "you have had 3 free cards!");
 		require(_freeMintable > 0, "there's no NFT to mint!");
 		_safeMint(msg.sender, id);
-		types[id] = uint8(block.timestamp % 3); // random type in 3
+		uint8 random = uint8(block.timestamp % 10); // random type in 3
+		if(random >= 0 && random < 7) {
+			if(greenLength >= 1000) {
+				if(goldLength >= 1000) {
+					_setTokenURI(id, purple);
+					types[id] = 1;
+				} else {
+					_setTokenURI(id, gold);
+					types[id] = 2;
+				}
+			}
+			_setTokenURI(id, green);
+			types[id] = 0;
+		} else if(random >= 7 && random < 9) {
+			if(goldLength >= 1000) {
+				if(purpleLength >= 1000) {
+					_setTokenURI(id, green);
+					types[id] = 0;
+				} else {
+					_setTokenURI(id, purple);
+					types[id] = 1;
+				}
+			}
+			_setTokenURI(id, gold);
+			types[id] = 2;
+		} else {
+			if(purpleLength >= 1000) {
+				if(greenLength >= 1000) {
+					_setTokenURI(id, gold);
+					types[id] = 2;
+				} else {
+					_setTokenURI(id, green);
+					types[id] = 0;
+				}
+			}
+			_setTokenURI(id, purple);
+			types[id] = 1;
+		}
 		_freeMintable--;
 		_freeLength[msg.sender]++;
 		id++;
@@ -44,8 +90,46 @@ contract CollectorPass is ERC721 {
 	function cheapMint() private {
 		require(_cheapLength[msg.sender] < 3, "you have had 3 free cards!");
 		require(_cheapMintable > 0, "there's no NFT to mint!");
+console.log(id);
 		_safeMint(msg.sender, id);
-		types[id] = uint8(block.timestamp % 3); // random type in 3
+		uint8 random = uint8(block.timestamp % 10); // random type in 3
+		if(random >= 0 && random < 7) {
+			if(greenLength >= 1000) {
+				if(goldLength >= 1000) {
+					_setTokenURI(id, purple);
+					types[id] = 1;
+				} else {
+					_setTokenURI(id, gold);
+					types[id] = 2;
+				}
+			}
+			_setTokenURI(id,green);
+			types[id] = 0;
+		} else if(random >= 7 && random < 9) {
+			if(goldLength >= 1000) {
+				if(purpleLength >= 1000) {
+					_setTokenURI(id, green);
+					types[id] = 0;
+				} else {
+					_setTokenURI(id, purple);
+					types[id] = 1;
+				}
+			}
+			_setTokenURI(id, gold);
+			types[id] = 2;
+		} else {
+			if(purpleLength >= 1000) {
+				if(greenLength >= 1000) {
+					_setTokenURI(id, gold);
+					types[id] = 2;
+				} else {
+					_setTokenURI(id, green);
+					types[id] = 0;
+				}
+			}
+			_setTokenURI(id, purple);
+			types[id] = 1;
+		}
 		_cheapMintable--;
 		_cheapLength[msg.sender]++;
 		id++;
@@ -56,9 +140,17 @@ contract CollectorPass is ERC721 {
 		return id;
 	}
 
-	function safeMint(address to, uint _id) external onlyOwner {
-		_safeMint(to, _id);
-		types[_id] = uint8(block.timestamp % 3); // random type in 3
+	function safeMint(address to, uint8 _id) external onlyOwner {
+		require(_id >=0 && _id < 3, "wrony type id!");
+		_safeMint(to, id);
+		types[id] = _id;
+		if(_id == 0) {
+			_setTokenURI(id, green);
+		} else if(_id == 2) {
+			_setTokenURI(id, gold);
+		} else if(_id == 1) {
+			_setTokenURI(id, purple);
+		}
 		id++;
 	}
 
